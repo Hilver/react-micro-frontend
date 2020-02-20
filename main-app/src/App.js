@@ -6,16 +6,23 @@ class App extends Component {
 
   state = {
     showCounter: false,
-    title: 'whoooaa! I\'m title!'
+    title: 'whoooaa! I\'m title!',
+    currentCount: 3
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { showCounter, title } = this.state
+    const { showCounter, title, currentCount } = this.state
     const shouldComponentUpdate = 
-      prevState.showCounter !== showCounter || prevState.title !== title 
+      prevState.showCounter !== showCounter || 
+      prevState.title !== title 
     if(shouldComponentUpdate) {
       if(showCounter) {
-        window.ReactCounter.mount({title})
+        const counterProps = {
+          title,
+          initialCount: currentCount,
+          onCountUpdate: this.onCountUpdate
+        }
+        window.ReactCounter.mount(counterProps)
       } else {
         window.ReactCounter.unmount()
       }
@@ -24,9 +31,12 @@ class App extends Component {
 
   toggleCounter = () => this.setState(({showCounter}) => ({showCounter: !showCounter}))
 
-  onTitleChange = (e) => this.setState(({title: e.target.value})) 
+  onTitleChange = (e) => this.setState(({title: e.target.value}))
+
+  onCountUpdate = currentCount => this.setState({currentCount})
 
   render() {
+    const { title, currentCount } = this.state
     return (
       <div className="App">
         <header className="App-header">
@@ -35,7 +45,10 @@ class App extends Component {
           <p>
             This is the main App. 
           </p>
-          <input type="text" value={this.state.title} onChange={this.onTitleChange}/> 
+          <p>
+            The count is: {currentCount}
+          </p>
+          <input type="text" value={title} onChange={this.onTitleChange}/> 
         </header>
       </div>
     );
