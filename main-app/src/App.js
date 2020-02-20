@@ -10,6 +10,15 @@ class App extends Component {
     currentCount: 3
   }
 
+  counterOneRef = React.createRef();
+  counterTwoRef = React.createRef();
+
+  componentDidMount() {
+    // just test another instance of the Counter
+    console.log(this.counterTwoRef.current)
+    window.ReactCounter.mount({ title: 'counter two' }, this.counterTwoRef.current);
+  }
+
   componentDidUpdate(prevProps, prevState) {
     const { showCounter, title, currentCount } = this.state
     const shouldComponentUpdate = 
@@ -22,9 +31,9 @@ class App extends Component {
           initialCount: currentCount,
           onCountUpdate: this.onCountUpdate
         }
-        window.ReactCounter.mount(counterProps)
+        window.ReactCounter.mount(counterProps, this.counterOneRef.current)
       } else {
-        window.ReactCounter.unmount()
+        window.ReactCounter.unmount(this.counterOneRef.current)
       }
     }
   }
@@ -40,8 +49,9 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
+          <div ref={this.counterTwoRef}></div>
           <img onClick={this.toggleCounter} src={logo} className="App-logo" alt="logo" />
-          <div id="counter-app"></div>
+          <div ref={this.counterOneRef}></div>
           <p>
             This is the main App. 
           </p>
