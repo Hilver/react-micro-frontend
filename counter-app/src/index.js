@@ -8,9 +8,9 @@ import Counter from './Counter';
 
 /* uncomment this block to "defer" ReactDOM.render and expose it globaly */
 window.ReactCounter = {
-    mount: () => {
+    mount: (props) => {
         const el = document.getElementById('counter-app');
-        ReactDOM.render(<Counter />, el);
+        ReactDOM.render(<Counter {...props}/>, el);
     },
     unmount: () => {
         const el = document.getElementById('counter-app');
